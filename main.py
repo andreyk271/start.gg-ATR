@@ -2,7 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-URL = "https://www.start.gg/tournament/road-to-wololo/event/june-weekly-i/brackets/1122871/1757431"
+URL = "https://www.start.gg/tournament/road-to-wololo/event/july-weekly-i/brackets/1125935/1757447"
 REQUEST = requests.get(URL)
 SOUP = BeautifulSoup(REQUEST.text, 'lxml')
 
@@ -48,16 +48,25 @@ def get_dqs(soup):
         else:
             dq = re.search("text-dq", str(item))
             winner = re.search("fa fa-check text-success", str(item))
-            if winner:
-                if dq.start() < winner.start():
+            if dq:
+                if winner:
+                    if dq.start() < winner.start():
+                        dq_l.append(0)
+                        dq_l.append(1)
+                    else:
+                        dq_l.append(1)
+                        dq_l.append(0)
+                else:
+                    dq_l.append(0)
+                    dq_l.append(0)
+            else:
+                secondary_check = re.search("match-section match-section-bottom", str(item))
+                if secondary_check.start() < winner.start():
                     dq_l.append(0)
                     dq_l.append(1)
                 else:
                     dq_l.append(1)
                     dq_l.append(0)
-            else:
-                dq_l.append(0)
-                dq_l.append(0)
     return dq_l
 
 
@@ -166,6 +175,27 @@ def rename(l):
             l[i] = "DarkPsicopata"
         elif l[i] == "mYi.Ourk":
             l[i] = "Ourk"
+        elif l[i] == "stamminen":
+            l[i] = "stamminen21"
+        elif l[i] == "SBS | ClearMan":
+            l[i] = "ClearMan"
+        elif l[i] == "hosein81":
+            l[i] = "hoseinm"
+        elif l[i] == "Der_schöne_Klaus":
+            l[i] = "Der schöne Klaus"
+        elif l[i] == "imtoonoob_AoE":
+            l[i] = "imtoonoob"
+        elif l[i] == "Cory.costa22":
+            l[i] = "Cory.Costa"
+        elif l[i] == "General_Wang_Jian":
+            l[i] = "General Wang Jian"
+        elif l[i] == "HB`":
+            l[i] = "HB"
+        elif l[i] == "Keyrun22":
+            l[i] = "Keyrun"
+        elif l[i] == "AOE4":
+            l[i] = "ORILIGHT"
+
 
 l1, l2 = get_name(SOUP), get_score(SOUP)
 rename(l1)
